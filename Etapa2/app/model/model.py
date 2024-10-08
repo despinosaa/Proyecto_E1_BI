@@ -1,5 +1,3 @@
-# app/model/model.py
-
 import joblib
 import logging
 from typing import Tuple

@@ -1,5 +1,3 @@
-# app/model/pipeline.py
-
 import joblib
 import pandas as pd
 from sklearn.pipeline import Pipeline
@@ -9,7 +7,6 @@ from nltk.corpus import stopwords
 import nltk
 import os
 
-# Descargar las stopwords de NLTK si no están disponibles
 nltk.download('stopwords')
 
 def create_pipeline(max_features=8000, alpha=1.0):
@@ -32,7 +29,7 @@ def train_and_persist_model(data_path: str, model_path: str, max_features=8000, 
     
     # Vectorización y modelo
     X = df['Textos_espanol']
-    Y = df['sdg']  # Usar etiquetas originales directamente
+    Y = df['sdg']
     
     pipeline = create_pipeline(max_features=max_features, alpha=alpha)
     pipeline.fit(X, Y)
@@ -42,7 +39,6 @@ def train_and_persist_model(data_path: str, model_path: str, max_features=8000, 
     print(f"Modelo guardado en {model_path}")
 
 if __name__ == "__main__":
-    # Asegurarse de que el directorio 'models/' exista
     os.makedirs('models', exist_ok=True)
     
     train_and_persist_model(

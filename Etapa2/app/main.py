@@ -1,8 +1,6 @@
-# app/main.py
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import Any, Dict, List
+from typing import List
 from sklearn.metrics import precision_score, recall_score, f1_score
 from app.utils.logging import setup_logging
 import logging
@@ -14,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 # Definir modelos de datos para las solicitudes y respuestas
 class PredictionRequest(BaseModel):
-    Textos_espanol: str  # Cambiado de List[str] a str
+    Textos_espanol: str
 
 class PredictionResponse(BaseModel):
     ods: int
@@ -43,12 +41,12 @@ except Exception as e:
     logger.error(f"Error al cargar el modelo: {e}")
     model_handler = None
 
-# Definir una ruta raíz opcional
+# Definir una ruta raíz
 @app.get("/")
 def read_root():
     return {"message": "Bienvenido a la API de Predicción de ODS. Usa /docs para interactuar con la API."}
 
-# Endpoint /predict modificado
+# Endpoint /predict
 @app.post("/predict", response_model=PredictionResponse)
 def predict(request: PredictionRequest):
     if model_handler is None:
@@ -61,7 +59,7 @@ def predict(request: PredictionRequest):
         logger.error(f"Error en predicción: {e}")
         raise HTTPException(status_code=400, detail="Error en la predicción.")
 
-# Endpoint /retrain sin cambios en el modelo de etiquetas, pero asegúrate de aceptar 3,4,5 directamente
+# Endpoint /retrain
 @app.post("/retrain", response_model=RetrainResponse)
 def retrain(request: RetrainRequest):
     global model_handler

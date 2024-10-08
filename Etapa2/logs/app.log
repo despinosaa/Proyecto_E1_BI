@@ -39,3 +39,12 @@
 2024-10-08 16:01:46 INFO app.model.model Modelo cargado desde models/model.joblib
 2024-10-08 16:01:46 INFO app.main Modelo cargado exitosamente.
 2024-10-08 16:02:05 INFO app.model.model Predicción: 3 con probabilidad: 0.8853
+2024-10-08 16:16:55 INFO app.model.model Modelo cargado desde models/model.joblib
+2024-10-08 16:16:55 INFO app.main Modelo cargado exitosamente.
+2024-10-08 16:18:39 INFO app.model.model Modelo reentrenado con nuevos datos.
+2024-10-08 16:18:39 INFO app.model.model Modelo guardado en models/model.joblib
+2024-10-08 16:21:11 INFO app.model.model Modelo reentrenado con nuevos datos.
+2024-10-08 16:21:11 INFO app.model.model Modelo guardado en models/model.joblib
+2024-10-08 16:21:28 ERROR app.main Etiqueta sdg inválida: 2
+2024-10-08 16:21:41 INFO app.model.model Modelo reentrenado con nuevos datos.
+2024-10-08 16:21:41 INFO app.model.model Modelo guardado en models/model.joblib
