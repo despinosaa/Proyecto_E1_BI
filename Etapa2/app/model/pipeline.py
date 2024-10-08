@@ -1,3 +1,5 @@
+# app/model/pipeline.py
+
 import joblib
 import pandas as pd
 from sklearn.pipeline import Pipeline
@@ -30,7 +32,7 @@ def train_and_persist_model(data_path: str, model_path: str, max_features=8000, 
     
     # Vectorización y modelo
     X = df['Textos_espanol']
-    Y = df['sdg'].map({3: 0, 4: 1, 5: 2})
+    Y = df['sdg']  # Usar etiquetas originales directamente
     
     pipeline = create_pipeline(max_features=max_features, alpha=alpha)
     pipeline.fit(X, Y)

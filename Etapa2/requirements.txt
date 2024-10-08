@@ -8,3 +8,5 @@ pydantic==1.10.9
 xgboost==1.7.5
 matplotlib==3.7.2
 seaborn==0.12.2
+numpy==1.23.5
+openpyxl

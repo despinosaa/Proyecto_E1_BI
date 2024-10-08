@@ -1,6 +1,8 @@
+# app/model/model.py
+
 import joblib
 import logging
-from typing import List
+from typing import Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -8,7 +10,7 @@ class ModelHandler:
     def __init__(self, model_path: str):
         self.model_path = model_path
         self.model = self.load_model()
-    
+
     def load_model(self):
         try:
             model = joblib.load(self.model_path)
@@ -17,7 +19,7 @@ class ModelHandler:
         except Exception as e:
             logger.error(f"Error al cargar el modelo: {e}")
             raise e
-    
+
     def save_model(self):
         try:
             joblib.dump(self.model, self.model_path)
@@ -25,17 +27,28 @@ class ModelHandler:
         except Exception as e:
             logger.error(f"Error al guardar el modelo: {e}")
             raise e
-    
-    def predict(self, texts: List[str]) -> List[int]:
+
+    def predict(self, text: str) -> int:
         try:
-            predictions = self.model.predict(texts)
-            logger.info(f"Predicciones realizadas para {len(texts)} instancias.")
-            return predictions.tolist()
+            prediction = self.model.predict([text])[0]
+            logger.info(f"Predicción realizada: {prediction}")
+            return prediction
         except Exception as e:
             logger.error(f"Error en predicción: {e}")
             raise e
-    
-    def retrain(self, texts: List[str], labels: List[int]):
+
+    def predict_with_probability(self, text: str) -> Tuple[int, float]:
+        try:
+            prediction = self.model.predict([text])[0]
+            probabilities = self.model.predict_proba([text])[0]
+            max_prob = round(probabilities.max(), 4)
+            logger.info(f"Predicción: {prediction} con probabilidad: {max_prob}")
+            return prediction, max_prob
+        except Exception as e:
+            logger.error(f"Error en predicción con probabilidad: {e}")
+            raise e
+
+    def retrain(self, texts: list, labels: list):
         try:
             self.model.fit(texts, labels)
             logger.info("Modelo reentrenado con nuevos datos.")
