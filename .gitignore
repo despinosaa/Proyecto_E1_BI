@@ -14,3 +14,7 @@ logs/
 *.logs/
 Etapa2/logs/
 
+# Pycache
+__pycache__/
+
+
