@@ -14,7 +14,7 @@ def create_pipeline(max_features=8000, alpha=1.0):
     
     pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(stop_words=spanish_stopwords, max_features=max_features)),
-        ('clf', MultinomialNB(alpha=alpha))
+        ('clf', MultinomialNB(alpha=alpha, force_alpha=False))
     ])
     
     return pipeline
