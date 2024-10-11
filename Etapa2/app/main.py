@@ -89,3 +89,51 @@ async def predict_csv(file: UploadFile = File(...)):
     except Exception as e:
         logger.error(f"Error en predicción: {e}")
         raise HTTPException(status_code=400, detail="Error en la predicción.")
+
+
+
+
+@app.post("/retrain", response_model=RetrainResponse)
+async def retrain(file: UploadFile = File(...)):
+    global model_handler
+    try:
+        # Leer el archivo CSV
+        contents = await file.read()
+        # Use StringIO to convert the contents to a file-like object
+        df = pd.read_csv(StringIO(contents.decode('utf-8')))
+        
+        # Validar la existencia de columnas necesarias
+        if 'Textos_espanol' not in df.columns or 'sdg' not in df.columns:
+            logger.error("El CSV debe contener las columnas 'Textos_espanol' y 'sdg'.")
+            raise HTTPException(status_code=400, detail="El CSV debe contener las columnas 'Textos_espanol' y 'sdg'.")
+        
+        # Extraer los textos y las etiquetas
+        texts = df['Textos_espanol'].tolist()
+        labels = df['sdg'].tolist()
+
+        # Validar la longitud de los datos
+        if len(texts) != len(labels):
+            logger.error("Longitud de Textos_espanol y sdg no coinciden.")
+            raise HTTPException(status_code=400, detail="La longitud de Textos_espanol y sdg debe ser igual.")
+
+        # Validar que las etiquetas sean 3, 4 o 5
+        for label in labels:
+            if label not in [3, 4, 5]:
+                logger.error(f"Etiqueta sdg inválida: {label}")
+                raise HTTPException(status_code=400, detail="Etiquetas sdg inválidas. Deben ser 3, 4 o 5.")
+
+        # Reentrenar el modelo
+        model_handler.retrain(texts, labels)
+
+        # Evaluar el modelo
+        y_pred = model_handler.model.predict(texts)
+        precision = precision_score(labels, y_pred, average='weighted')
+        recall = recall_score(labels, y_pred, average='weighted')
+        f1 = f1_score(labels, y_pred, average='weighted')
+
+        return RetrainResponse(precision=precision, recall=recall, f1_score=f1)
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        logger.error(f"Error en reentrenamiento: {e}")
+        raise HTTPException(status_code=500, detail="Error en el reentrenamiento del modelo.")
