@@ -1,2 +1,16 @@
-#Environments
-venv\
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Logs
+*.log
+logs/
+*.log.*
+*.logs/
+Etapa2/logs/
+
