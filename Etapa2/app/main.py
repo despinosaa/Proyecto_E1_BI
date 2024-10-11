@@ -46,7 +46,6 @@ except Exception as e:
     logger.error(f"Error al cargar el modelo: {e}")
     model_handler = None
 
-# Definir una ruta raiz para el HTML
 # Ruta raíz para servir el HTML
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
@@ -76,7 +75,6 @@ def predict(request: PredictionRequest):
     except Exception as e:
         logger.error(f"Error en predicción: {e}")
         raise HTTPException(status_code=400, detail="Error en la predicción.")
-    
 
 @app.post("/predict_csv")
 async def predict_csv(file: UploadFile = File(...)):
@@ -105,9 +103,6 @@ async def predict_csv(file: UploadFile = File(...)):
     except Exception as e:
         logger.error(f"Error en predicción: {e}")
         raise HTTPException(status_code=400, detail="Error en la predicción.")
-
-
-
 
 @app.post("/retrain", response_model=RetrainResponse)
 async def retrain(file: UploadFile = File(...)):
