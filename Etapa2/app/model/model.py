@@ -1,6 +1,6 @@
 import joblib
 import logging
-from typing import Tuple
+from typing import Tuple, List
 
 logger = logging.getLogger(__name__)
 
@@ -54,3 +54,21 @@ class ModelHandler:
         except Exception as e:
             logger.error(f"Error en reentrenamiento: {e}")
             raise e
+
+
+    def predict_with_probability_csv(self, texts: List[str]) -> List[Tuple[int, float]]:
+            predictions = []
+            
+            try:
+                for text in texts:
+                    prediction = self.model.predict([text])[0]
+                    probabilities = self.model.predict_proba([text])[0]
+                    max_prob = round(probabilities.max(), 4)
+                    logger.info(f"Predicción: {prediction} con probabilidad: {max_prob}")
+                    predictions.append((prediction, max_prob))
+            
+                return predictions  
+
+            except Exception as e:
+                logger.error(f"Error en predicción con probabilidad: {e}")
+                raise e
