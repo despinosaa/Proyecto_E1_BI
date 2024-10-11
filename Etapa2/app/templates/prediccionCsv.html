@@ -1,0 +1,89 @@
+{% extends "Navbar.html" %}
+{% block content %}
+<style>
+    
+    h1 {
+        color: #a21919;
+        margin-bottom: 20px; 
+    }
+    form {
+        flex-direction: column;
+        width: 80%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        margin-bottom: 20px; 
+        margin: 0 auto 20px auto;
+        margin-top: 10px;
+    }
+    button {
+        background-color: #a21919;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-bottom: 20px; 
+    }
+    button:hover {
+        background-color: #bd5151;
+    }
+    input[type="file"] {
+        display: block;   
+        margin: 0 auto 20px auto;
+        margin-top: 10px;
+
+    }
+    #result {
+        margin-top: 15px;
+        font-weight: bold;
+    }
+    .btn-success {
+        background-color: #a21919;  /* Color verde para el botón */
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;  /* Elimina el subrayado del texto */
+        display: inline-block;   /* Permite aplicar padding y margin */
+    }
+
+    .btn-success:hover {
+        background-color: #6f1010;  /* Color más oscuro cuando se pasa el mouse */
+    }
+    </style>
+
+    <h1>Subir CSV para Predicción</h1>
+    <form id="csvForm" action="/predict_csv" method="post" enctype="multipart/form-data">
+        <input type="file" id="csvFile" name="file" accept=".csv">
+        <button type="submit" class="btn btn-primary">Subir</button>
+    </form>
+
+    <div id="downloadLink" style="display:none; margin-top: 20px;">
+        <a id="csvDownload" href="" class="btn btn-success">Descargar CSV con Predicciones</a>
+    </div>
+
+    <script>
+        const form = document.getElementById('csvForm');
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const response = await fetch("/predict_csv", {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const downloadLink = document.getElementById('csvDownload');
+                downloadLink.href = url;
+                downloadLink.download = 'predicciones.csv';
+                document.getElementById('downloadLink').style.display = 'block';
+            } else {
+                alert('Hubo un error al procesar el archivo.');
+            }
+        });
+    </script>
+{% endblock %}

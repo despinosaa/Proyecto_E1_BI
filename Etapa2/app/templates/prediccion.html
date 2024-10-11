@@ -1,0 +1,81 @@
+{% extends "Navbar.html" %}
+{% block content %}
+    <style>
+    style>
+    .container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        text-align: center;
+        padding-left: 40px; 
+        padding-right: 40px; 
+    }
+    h1 {
+        color: #a21919;
+        margin-bottom: 20px; 
+    }
+    textarea {
+        width: 80%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        margin-bottom: 20px; 
+        margin: 0 auto 20px auto;
+    }
+    button {
+        background-color: #a21919;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-bottom: 20px; 
+    }
+    button:hover {
+        background-color: #bd5151;
+    }
+    #result {
+    margin-top: 15px;
+    font-weight: normal;
+    font-size: 18px; 
+    color: #333; /* Color del texto */
+    background-color: white; /* Fondo más claro para resaltar */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    border: 1px solid #ddd; /* Borde suave */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+</style>
+
+
+    <h1>Predicción de Niveles de ODS</h1>
+    <textarea id="text-input" rows="4" cols="50" placeholder="Escribe tu texto aquí..."></textarea>
+    <button id="predict-button">Predecir</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('predict-button').onclick = async function() {
+            const textInput = document.getElementById('text-input').value;
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ Textos_espanol: textInput })
+            });
+            const result = await response.json();
+            if (result.ods==3){
+            document.getElementById('result').innerText = `El texto enviado hace parte del ods Numero ${result.ods} con una probabilidad de ${result.probability}.El ODS 3 tiene como objetivo garantizar una vida sana y el bienestar para todos, enfocándose en reducir la mortalidad materna e infantil, combatir epidemias y asegurar el acceso universal a servicios de salud esenciales. `;
+        }
+        if (result.ods==4){
+            document.getElementById('result').innerText = `El texto enviado hace parte del ods Numero ${result.ods} con una probabilidad de ${result.probability}. El ODS 4 busca garantizar una educación inclusiva, equitativa y de calidad, promoviendo oportunidades de aprendizaje para todos a lo largo de la vida. `;
+        }
+        if (result.ods==5){
+            document.getElementById('result').innerText = `El texto enviado hace parte del ods Numero ${result.ods} con una probabilidad de ${result.probability}. El ODS 5 se enfoca en lograr la igualdad de género y empoderar a mujeres y niñas, eliminando la violencia y la discriminación contra ellas. Busca garantizar su plena participación en la vida.`;
+        }
+    };
+    </script>
+{% endblock %}

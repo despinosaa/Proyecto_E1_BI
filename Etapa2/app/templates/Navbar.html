@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicción ODS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+        }
+        nav {
+            background-color: #a21919;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            background-color: #bd5151;
+            border-radius: 5px;
+        }
+        .container {
+            margin: 20px auto;
+            width: 60%;
+        }
+        .logo {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 150px; 
+        }
+    </style>
+</head>
+<body>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaLA8GYGT4nUl7TNExdPHPK6HuKumQ6rSDWA&s" alt="Logo" class="logo">
+    <!-- Barra de navegación -->
+    <nav>
+        <div>
+            <a href="/predict">Predicción Simple</a>
+            <a href="/predict_csv">Predicción CSV</a>
+            <a href="/retrain">Reentrenar Modelo</a>
+        </div>
+    </nav>
+
+
+
+    <div class="container">
+
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

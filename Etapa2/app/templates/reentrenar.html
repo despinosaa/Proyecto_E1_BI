@@ -1,0 +1,79 @@
+{% extends "Navbar.html" %}
+
+{% block title %}Reentrenar Modelo{% endblock %}
+
+{% block content %}
+<style>
+    h1 {
+        color: #a21919;
+        margin-bottom: 20px; 
+    }
+    form {
+        width: 80%;
+        padding: 20px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        margin-bottom: 20px; 
+        margin: 0 auto 20px auto;
+        margin-top: 10px;
+    }
+    button {
+        background-color: #a21919;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+        margin-bottom: 20px; 
+    }
+    button:hover {
+        background-color: #bd5151;
+    }
+    #result {
+        margin-top: 15px;
+        font-weight: bold;
+    }
+    #result {
+    margin-top: 15px;
+    font-weight: normal;
+    font-size: 18px; 
+    color: #333; /* Color del texto */
+    background-color: white; /* Fondo más claro para resaltar */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    border: 1px solid #ddd; /* Borde suave */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+</style>
+<h1>Reentrenar Modelo</h1>
+
+<form action="/retrain" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="file">Subir archivo CSV para reentrenar:</label>
+        <input type="file" class="form-control-file" id="file" name="file" accept=".csv">
+    </div>
+    <button id="retrain-button" type="submit" class="btn btn-primary">Reentrenar</button>
+</form>
+<div id="result"></div>
+<script>
+document.getElementById('retrain-button').onclick = async function(event) {
+    event.preventDefault(); 
+
+    const formData = new FormData(document.querySelector('form'));
+    const response = await fetch('/retrain', {
+        method: 'POST',
+        body: formData 
+    });
+
+    if (response.ok) {
+        const metrics = await response.json();
+        document.getElementById('result').innerText = `F1-score: ${metrics.f1_score}, Recall: ${metrics.recall}, Precision: ${metrics.precision}`;
+    } else {
+        console.error('Error al obtener métricas.');
+        document.getElementById('result').innerText = 'Error al cargar las métricas.';
+    }
+};
+</script>
+{% endblock %}

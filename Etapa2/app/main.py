@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, File, UploadFile, Response
+from fastapi import FastAPI, HTTPException, File, UploadFile, Response, Request
 import pandas as pd
 from io import StringIO
 from pydantic import BaseModel
@@ -7,6 +7,8 @@ from sklearn.metrics import precision_score, recall_score, f1_score
 from app.utils.logging import setup_logging
 import logging
 from app.model.model import ModelHandler
+from fastapi.responses import HTMLResponse 
+from fastapi.templating import Jinja2Templates
 
 # Configurar logging
 setup_logging()
@@ -31,7 +33,8 @@ class RetrainResponse(BaseModel):
 
 # Inicializar la aplicación
 app = FastAPI(title="ODS Prediction API", description="API para predecir niveles de ODS basado en texto.")
-
+#ruta para los templates 
+templates = Jinja2Templates(directory="app/templates") 
 # Ruta al modelo
 MODEL_PATH = 'models/model.joblib'
 
@@ -43,10 +46,23 @@ except Exception as e:
     logger.error(f"Error al cargar el modelo: {e}")
     model_handler = None
 
-# Definir una ruta raíz
-@app.get("/")
-def read_root():
-    return {"message": "Bienvenido a la API de Predicción de ODS. Usa /docs para interactuar con la API."}
+# Definir una ruta raiz para el HTML
+# Ruta raíz para servir el HTML
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    return templates.TemplateResponse("Navbar.html", {"request": request})
+# Ruta para la página de predicción de texto
+@app.get("/predict")
+async def predict_text(request: Request):
+    return templates.TemplateResponse("prediccion.html", {"request": request})
+# Ruta para la página de predicción con CSV
+@app.get("/predict_csv")
+async def predict_csv(request: Request):
+    return templates.TemplateResponse("prediccionCsv.html", {"request": request})
+# Ruta para la página de reentrenamiento
+@app.get("/retrain")
+async def retrain(request: Request):
+    return templates.TemplateResponse("reentrenar.html", {"request": request})
 
 # Endpoint /predict
 @app.post("/predict", response_model=PredictionResponse)
