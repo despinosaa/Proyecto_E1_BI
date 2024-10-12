@@ -58,9 +58,9 @@ class ModelHandler:
             probabilities = self.model.predict_proba([text])[0]
             prediction = self.model.predict([text])[0]
             ods_probabilities = {
-                3: probabilities[0],
-                4: probabilities[1],
-                5: probabilities[2]
+                3: round(probabilities[0],2),
+                4: round(probabilities[1],2),
+                5: round(probabilities[2],2)
             }
             logger.info(f"Predicción: {prediction} con probabilidades: {ods_probabilities}")
             return prediction, ods_probabilities
@@ -111,7 +111,7 @@ class ModelHandler:
                 f1_after = f1_score(original_labels, y_pred_after, average='weighted')
                 logger.info(f"F1 Score después del reentrenamiento: {f1_after:.4f}")
 
-                return f1_before, f1_after
+                return round(f1_before,2), round(f1_after,2)
 
             except Exception as e:
                 logger.error(f"Error en reentrenamiento: {e}")

@@ -4,25 +4,29 @@
     style>
     .container {
         background-color: white;
-        padding: 20px;
+        padding: 10px;
         border-radius: 20px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        width: 400px;
+        width: 90%;
         text-align: center;
         padding-left: 40px; 
         padding-right: 40px; 
     }
     h1 {
         color: #a21919;
-        margin-bottom: 20px; 
+        margin-bottom: 10px; 
+    }
+    h2 {
+        color: #a21919;
+        margin-bottom: 10px; 
     }
     textarea {
-        width: 80%;
+        width: 90%;
         padding: 10px;
         border-radius: 5px;
         border: 1px solid #ddd;
-        margin-bottom: 20px; 
-        margin: 0 auto 20px auto;
+        margin-bottom: 10px; 
+        margin: 0 auto 10px auto;
     }
     button {
         background-color: #a21919;
@@ -32,22 +36,30 @@
         border-radius: 5px;
         cursor: pointer;
         font-size: 16px;
-        margin-bottom: 20px; 
+        margin-bottom: 10px; 
     }
     button:hover {
         background-color: #bd5151;
     }
     #result {
-    margin-top: 15px;
+    margin-top: 5px;
     font-weight: normal;
     font-size: 18px; 
     color: #333;
     background-color: white;
-    padding: 10px; 
+    padding: 5px; 
     border-radius: 5px;
     border: 1px solid #ddd; 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    width: 90%;
 }
+.chart-container {
+        margin-top: 5px;
+        width: 250px; 
+        height: 250px;
+        text-align: center;
+        margin: 0 auto;
+    }
 </style>
 
 
@@ -55,8 +67,14 @@
     <textarea id="text-input" rows="4" cols="50" placeholder="Escribe tu texto aquí..."></textarea>
     <button id="predict-button">Predecir</button>
     <div id="result"></div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <h2>Probabilidades de pertenencia a cada ODS</h2>
+    <div class="chart-container">
+        <canvas id="probabilityChart"></canvas>
+    </div>
 
     <script>
+        //imprimir el mensaje de salida y gestionar texto
         document.getElementById('predict-button').onclick = async function() {
             const textInput = document.getElementById('text-input').value;
             const response = await fetch('/predict', {
@@ -68,14 +86,33 @@
             });
             const result = await response.json();
             if (result.ods==3){
-            document.getElementById('result').innerText = `El texto enviado hace parte del ODS Numero ${result.ods} con una probabilidad de ${result.probability}. El ODS 3 tiene como objetivo garantizar una vida sana y el bienestar para todos, enfocándose en reducir la mortalidad materna e infantil, combatir epidemias y asegurar el acceso universal a servicios de salud esenciales. `;
+            document.getElementById('result').innerText = `El texto enviado hace parte del ODS Numero ${result.ods} con una probabilidad de ${result.probabilities["3"]}. El ODS 3 tiene como objetivo garantizar una vida sana y el bienestar para todos, enfocándose en reducir la mortalidad materna e infantil, combatir epidemias y asegurar el acceso universal a servicios de salud esenciales. `;
         }
         if (result.ods==4){
-            document.getElementById('result').innerText = `El texto enviado hace parte del ODS Numero ${result.ods} con una probabilidad de ${result.probability}. El ODS 4 busca garantizar una educación inclusiva, equitativa y de calidad, promoviendo oportunidades de aprendizaje para todos a lo largo de la vida. `;
+            document.getElementById('result').innerText = `El texto enviado hace parte del ODS Numero ${result.ods} con una probabilidad de ${result.probabilities["4"]}. El ODS 4 busca garantizar una educación inclusiva, equitativa y de calidad, promoviendo oportunidades de aprendizaje para todos a lo largo de la vida. `;
         }
         if (result.ods==5){
-            document.getElementById('result').innerText = `El texto enviado hace parte del ODS Numero ${result.ods} con una probabilidad de ${result.probability}. El ODS 5 se enfoca en lograr la igualdad de género y empoderar a mujeres y niñas, eliminando la violencia y la discriminación contra ellas. Busca garantizar su plena participación en la vida.`;
+
+            document.getElementById('result').innerText = `El texto enviado hace parte del ODS Numero ${result.ods} con una probabilidad de ${result.probabilities["5"]}. El ODS 5 se enfoca en lograr la igualdad de género y empoderar a mujeres y niñas, eliminando la violencia y la discriminación contra ellas. Busca garantizar su plena participación en la vida.`;
         }
+   //imprimir grafico 
+    const ctx = document.getElementById('probabilityChart').getContext('2d');
+        const labels = Object.keys(result.probabilities).map(key => `ODS ${key}`);
+        const data = Object.values(result.probabilities);
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Probabilidades de ODS',
+                    data: data,
+                    backgroundColor: [
+                        '#a21942',
+                        '#edb8b1',
+                        '#e47b7b'
+                    ]}]}
+        });
     };
     </script>
 {% endblock %}

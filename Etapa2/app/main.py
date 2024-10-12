@@ -27,8 +27,7 @@ class RetrainRequest(BaseModel):
     sdg: List[int]
 
 class RetrainResponse(BaseModel):
-    precision: float
-    recall: float
+
     f1_score_before: float
     f1_score_after: float
 
@@ -77,7 +76,7 @@ def predict(request: PredictionRequest):
         logger.error("Modelo no cargado.")
         raise HTTPException(status_code=500, detail="Modelo no cargado.")
     try:
-        ods_prediction, probabilities = model_handler.predict_with_probability(request.Textos_espanol)
+        ods_prediction, probabilities = model_handler.predict_with_probabilities(request.Textos_espanol)
         return PredictionResponse(ods=ods_prediction, probabilities=probabilities)
     except Exception as e:
         logger.error(f"Error en predicción: {e}")

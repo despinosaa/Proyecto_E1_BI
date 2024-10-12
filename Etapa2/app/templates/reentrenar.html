@@ -8,6 +8,10 @@
         color: #a21919;
         margin-bottom: 20px; 
     }
+    h2 {
+        color: #a21919;
+        margin-bottom: 10px; 
+    }
     form {
         width: 80%;
         padding: 20px;
@@ -46,6 +50,13 @@
     border: 1px solid #ddd; 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
 }
+.chart-container {
+        margin-top: 5px;
+        width:300px; 
+        height: 300px;
+        text-align: center;
+        margin: 0 auto;
+    }
 </style>
 <h1>Reentrenar Modelo</h1>
 
@@ -57,7 +68,13 @@
     <button id="retrain-button" type="submit" class="btn btn-primary">Reentrenar</button>
 </form>
 <div id="result"></div>
+<h2>Cambio en el f1-score del modelo</h2>
+<div class="chart-container">
+    <canvas id="f1ScoreChart"></canvas>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+
 document.getElementById('retrain-button').onclick = async function(event) {
     event.preventDefault(); 
 
@@ -69,11 +86,51 @@ document.getElementById('retrain-button').onclick = async function(event) {
 
     if (response.ok) {
         const metrics = await response.json();
-        document.getElementById('result').innerText = `F1-score:${metrics.f1_score}     Recall:${metrics.recall}    Precision:${metrics.precision}`;
+        document.getElementById('result').innerText = `El nuevo F1-score luego de reentrenar es de: ${metrics.f1_score_after} `;
+
+            const f1Before = metrics.f1_score_before;
+            const f1After = metrics.f1_score_after;
+
+            // Crear el gráfico
+            const ctx = document.getElementById('f1ScoreChart').getContext('2d');
+
+            const data = {
+                labels: ['F1-Score Antes', 'F1-Score Después'],
+                datasets: [{
+                    label: 'F1-Score',
+                    data: [f1Before, f1After], 
+                    backgroundColor: ['#a21942', '#edb8b1'],  
+                    borderColor: ['#edb8b1', '#a21942'],
+                    borderWidth: 1 }]
+            };
+            const config = {
+                type: 'bar',
+                data: data,
+                options: {
+                    scales: {
+                        y: { beginAtZero: false,max: 1,min: 0.9, 
+                            ticks: {
+                    stepSize: 0.01,}
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            };
+
+            if (window.f1Chart) {
+                window.f1Chart.destroy();
+            }
+
+            window.f1Chart = new Chart(ctx, config);
     } else {
         console.error('Error al obtener métricas.');
         document.getElementById('result').innerText = 'Error al cargar las métricas.';
     }
-};
+        };
+    
 </script>
 {% endblock %}
