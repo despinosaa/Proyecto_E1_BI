@@ -52,7 +52,7 @@ except Exception as e:
 # Ruta raíz para servir el HTML
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    return templates.TemplateResponse("Navbar.html", {"request": request})
+    return templates.TemplateResponse("inicio.html", {"request": request})
 
 # Ruta para la página de predicción de texto
 @app.get("/predict")

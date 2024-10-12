@@ -74,6 +74,7 @@
     </div>
 
     <script>
+        let probabilityChart = null;
         //imprimir el mensaje de salida y gestionar texto
         document.getElementById('predict-button').onclick = async function() {
             const textInput = document.getElementById('text-input').value;
@@ -95,24 +96,35 @@
 
             document.getElementById('result').innerText = `El texto enviado hace parte del ODS Numero ${result.ods} con una probabilidad de ${result.probabilities["5"]}. El ODS 5 se enfoca en lograr la igualdad de género y empoderar a mujeres y niñas, eliminando la violencia y la discriminación contra ellas. Busca garantizar su plena participación en la vida.`;
         }
-   //imprimir grafico 
-    const ctx = document.getElementById('probabilityChart').getContext('2d');
-        const labels = Object.keys(result.probabilities).map(key => `ODS ${key}`);
-        const data = Object.values(result.probabilities);
+        // Limpiar el gráfico anterior si existe
+            if (probabilityChart) {
+                probabilityChart.destroy();
+            }
 
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Probabilidades de ODS',
-                    data: data,
-                    backgroundColor: [
-                        '#a21942',
-                        '#edb8b1',
-                        '#e47b7b'
-                    ]}]}
-        });
-    };
+            // Imprimir gráfico 
+            const ctx = document.getElementById('probabilityChart').getContext('2d');
+            const labels = Object.keys(result.probabilities).map(key => `ODS ${key}`);
+            const data = Object.values(result.probabilities);
+
+            // Configuración del gráfico
+            const config = {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Probabilidades de ODS',
+                        data: data,
+                        backgroundColor: [
+                            '#a21942',
+                            '#edb8b1',
+                            '#e47b7b'
+                        ]
+                    }]
+                }
+            };
+
+            // Crear un nuevo gráfico
+            probabilityChart = new Chart(ctx, config);
+        };
     </script>
 {% endblock %}

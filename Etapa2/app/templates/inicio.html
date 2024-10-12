@@ -1,0 +1,53 @@
+{% extends "Navbar.html" %}
+{% block content %}
+<style>    
+h2 {
+    color: #a21919;
+    margin-bottom: 10px; 
+}
+p {
+        font-size: 16px;
+        line-height: 1.6; 
+        text-align: justify; 
+        color: #333; 
+        margin-bottom: 20px; 
+        padding: 10px; 
+        background-color: #f9f9f9;
+        border-left: 4px solid #a21919; 
+        border-radius: 5px; 
+    }
+
+</style>
+<h2>Introducción a los Objetivos de Desarrollo Sostenible (ODS)</h2>
+<p>
+    Los Objetivos de Desarrollo Sostenible (ODS) son una llamada universal a la acción para erradicar la pobreza, proteger el planeta y garantizar la paz y la prosperidad para todos. 
+    Adoptados por todas las naciones miembros de la ONU, estos 17 objetivos abordan los desafíos más importantes del siglo XXI.
+
+Este proyecto se enfoca particularmente en los ODS 3, 4 y 5:
+<br>
+<strong>ODS 3: Salud y Bienestar </strong>- Garantizar una vida sana y promover el bienestar para todos.
+<br>
+<strong>ODS 4: Educación de Calidad</strong> - Asegurar una educación inclusiva y de calidad para todos.
+<br>
+<strong> ODS 5: Igualdad de Género</strong> - Lograr la igualdad de género y empoderar a mujeres y niñas.
+<br>
+</p>
+
+<h2>Objetivos de la Aplicación</h2>
+<p>
+    Conscientes de la importancia de los ODS, esta aplicación tiene como objetivo <strong>automatizar el análisis de textos</strong>, 
+    permitiendo caracterizar información relevante de manera eficiente. Esto no solo optimiza la toma de decisiones, 
+    sino que también facilita la comprensión de datos complejos en contextos organizacionales.
+</p>
+
+<h2>Funcionalidades de la Aplicación</h2>
+<p>La aplicación ofrece tres funcionalidades clave para facilitar el análisis de datos:
+    <br>
+    <strong>Predicción Simple:</strong> 
+    Permite a los usuarios ingresar datos manualmente y recibir predicciones instantáneas, optimizando la toma de decisiones en tiempo real.
+    <br><strong>Predicción con CSV:</strong>
+     Facilita el análisis de grandes volúmenes de datos al permitir la carga de archivos CSV. La aplicación procesará automáticamente cada entrada, proporcionando predicciones rápidas y eficientes.
+     <br><strong>Reentrenar Modelo:</strong>
+     Los usuarios pueden actualizar el modelo analítico cargando un nuevo archivo CSV, asegurando que las predicciones se mantengan precisas y relevantes a lo largo del tiempo.
+</p>
+{% endblock %}
