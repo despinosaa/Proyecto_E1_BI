@@ -7,9 +7,11 @@ from sklearn.metrics import f1_score  # type: ignore
 logger = logging.getLogger(__name__)
 
 class ModelHandler:
-    def __init__(self, model_path: str):
+    def __init__(self, model_path: str, data_path: str):
         self.model_path = model_path
+        self.data_path=data_path
         self.model = self.load_model()
+        
 
     def load_model(self):
         try:
@@ -83,34 +85,34 @@ class ModelHandler:
                 logger.error(f"Error en predicción con probabilidad: {e}")
                 raise e
             
-def retrain(self, new_texts: List[str], new_labels: List[int]) -> Tuple[float, float]:
-        try:
-            # Cargar datos originales
-            original_df = self.load_original_data()
-            original_texts = original_df['Textos_espanol'].tolist()
-            original_labels = original_df['sdg'].tolist()
+    def retrain(self, new_texts: List[str], new_labels: List[int]) -> Tuple[float, float]:
+            try:
+                # Cargar datos originales
+                original_df = self.load_original_data()
+                original_texts = original_df['Textos_espanol'].tolist()
+                original_labels = original_df['sdg'].tolist()
 
-            # Combinar datos originales con nuevos
-            combined_texts = original_texts + new_texts
-            combined_labels = original_labels + new_labels
+                # Combinar datos originales con nuevos
+                combined_texts = original_texts + new_texts
+                combined_labels = original_labels + new_labels
 
-            # Evaluar F1 Score antes del reentrenamiento
-            y_pred_before = self.model.predict(original_texts)
-            f1_before = f1_score(original_labels, y_pred_before, average='weighted')
-            logger.info(f"F1 Score antes del reentrenamiento: {f1_before:.4f}")
+                # Evaluar F1 Score antes del reentrenamiento
+                y_pred_before = self.model.predict(original_texts)
+                f1_before = f1_score(original_labels, y_pred_before, average='weighted')
+                logger.info(f"F1 Score antes del reentrenamiento: {f1_before:.4f}")
 
-            # Reentrenar el modelo con los datos combinados
-            self.model.fit(combined_texts, combined_labels)
-            self.save_model()
-            logger.info("Modelo reentrenado con datos combinados.")
+                # Reentrenar el modelo con los datos combinados
+                self.model.fit(combined_texts, combined_labels)
+                self.save_model()
+                logger.info("Modelo reentrenado con datos combinados.")
 
-            # Evaluar F1 Score después del reentrenamiento
-            y_pred_after = self.model.predict(original_texts)
-            f1_after = f1_score(original_labels, y_pred_after, average='weighted')
-            logger.info(f"F1 Score después del reentrenamiento: {f1_after:.4f}")
+                # Evaluar F1 Score después del reentrenamiento
+                y_pred_after = self.model.predict(original_texts)
+                f1_after = f1_score(original_labels, y_pred_after, average='weighted')
+                logger.info(f"F1 Score después del reentrenamiento: {f1_after:.4f}")
 
-            return f1_before, f1_after
+                return f1_before, f1_after
 
-        except Exception as e:
-            logger.error(f"Error en reentrenamiento: {e}")
-            raise e
+            except Exception as e:
+                logger.error(f"Error en reentrenamiento: {e}")
+                raise e
