@@ -1,10 +1,10 @@
-import joblib
-import pandas as pd
-from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
-from nltk.corpus import stopwords
-import nltk
+import joblib # type: ignore
+import pandas as pd # type: ignore # type: ignore
+from sklearn.pipeline import Pipeline # type: ignore # type: ignore
+from sklearn.feature_extraction.text import TfidfVectorizer # type: ignore
+from sklearn.naive_bayes import MultinomialNB # type: ignore
+from nltk.corpus import stopwords # type: ignore
+import nltk # type: ignore
 import os
 
 nltk.download('stopwords')
